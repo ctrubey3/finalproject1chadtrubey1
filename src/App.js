@@ -1,24 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+//pages
+import Cart from "./components/pages/Cart";
+import Admin from "./components/pages/Admin";
+import FirePage from "./components/pages/FirePage";
+import UserInfo from "./components/pages/UserInfo";
+
+
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Nav from "./components/core/Nav";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+        <div className="App">
+          <Nav/>
+          <Switch>
+            <Route exact path={"/"} component={FirePage}/>
+            <Route path={"/cart"} component={Cart}/>
+            <Route path={"/admin"} component={Admin}/>
+              <Route exact path={"/UserInfo/:id"} component={UserInfo}/>
+          </Switch>
+
+        </div>
+      </Router>
   );
 }
 

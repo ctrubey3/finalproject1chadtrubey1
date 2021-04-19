@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+link {
+  display: inline-block;
+  padding: 0.5em 1em;
+  color: rgba(255, 255, 255, 0.835);
+  font-weight: bold;
+  text-decoration: none;
+}
+nav{
+  width:100%;
+  margin: 5px;
+  background-color: midnightblue;
+  color: white;
+  padding:20px;
+  height: 20px;
+}
+a{
+  color:white;
+  text-decoration: none;
+  margin: 8px;
+}
