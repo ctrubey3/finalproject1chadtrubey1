@@ -77,12 +77,11 @@ function Admin(){
         display:"block",
         height:"350px",
         width: "250px",
-        margin:"5px",
+        marginLeft:"39%",
         backgroundColor: "darkblue",
         padding: "10px",
         border: "1px solid #ccc",
         boxshadow: "0 0 10px #ccc",
-        position: "center",
     }
 
 
@@ -103,15 +102,25 @@ function Admin(){
         <div>
             <h1>Admin Page</h1>
             {ProductsEles}
+
             <input type="text" placeholder={"Image..."} onChange={handleChange("Image")}/>
-            <input type="text" placeholder={"Name..."} onChange={handleChange("name")}/>
+
+            <input type="text"
+                   placeholder={"Name..."}
+                   onClick={() => alert("Name must be longer than 2 characters")}
+                   onChange={handleChange("name")}/>
+
+
+
             <input type="text" placeholder={"Stock..."} onChange={handleChange("stock")}/>
             <input type="text" placeholder={"Price..."} onChange={handleChange("price")}/>
 
+
             <button onClick={handleSubmit}>Submit</button>
+
 
         </div>
     )
 }
 
-export default Admin
+export default Admin;
