@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
+import {Link} from "react-router-dom";
+import {data} from "../../data";
+
 
 
 const Cart = () => {
-
-    const elements =  [
-        {name: "galaxy", label: "Galaxy S Max", id: 1, price: 650},
-        {name: "apple", label: "Iphone", id: 2, price: 600},
-        {name: "berry", label: "Black Berry", id: 3, price: 600},
-        {name: "samsung", label: "Android", id: 3, price: 200}
-    ];
+    const elements = data
     const defaultValues = {galaxy: 0, apple: 0, berry: 0, samsung: 0};
     const [values, setValues] = useState(defaultValues);
+    const [stocks, setStocks] = useState(defaultValues);
+
+
+
+
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -29,15 +31,36 @@ const Cart = () => {
     }
 
     const handleOnChange = e => {
-        setValues({...values, [e.target.name]: e.target.value});
+        setValues({...values, [e.target.name]: e.target.value},
+        setStocks({...stocks, [e.target.name]: e.target.stock},
+
+        ) );
+    }
+
+
+
+    const containerStyle= {
+        display: "block",
+        height: "350px",
+        width: "250px",
+        marginLeft:"35%",
+
+        backgroundColor: "green",
+        padding: "10px",
+        border: "1px solid #ccc",
+        boxshadow: "0 0 10px #ccc",
+        justifyContent: "center",
+
     }
 
     return (
+
         <form onSubmit={handleSubmit}>
+            <h1>Shopping Cart</h1>
             <div className="container">
                 <ul>
                     {elements.map(item =>
-                            <li
+                            <ul
                                 className="col"
                                 key={item.id}
                             >
@@ -45,8 +68,11 @@ const Cart = () => {
                                     id={item.id}
                                     htmlFor={item.id}
                                 >
-                     <span>
-                        {item.label}
+                     <span style={containerStyle}>
+                         <img src={item.img} width="100" alt="item.img"/>
+                         <h3>{item.label}</h3>
+                         <h3>Price:{item.price}$</h3>
+                         <h3>IN STOCK:{(values[item.name ] - item.stock)}</h3>
                     </span>
                                 </label>
                                 <input
@@ -60,14 +86,17 @@ const Cart = () => {
                                 />
                                 <span className="value">
                         ${(values[item.name] * item.price ).toFixed(2)}
+
                     </span>
-                            </li>
+
+                            </ul>
                     )}
                 </ul>
+
                 <div className="col-footer">
                     <span className="total">$ {total()}</span>
-                   <button> <span onClick={() => setValues(defaultValues)}>Clear</span></button>
-                    <button type="submit">Check Out</button>
+                   <button><span onClick={() => setValues(defaultValues)}>Clear</span></button>
+                    <button><span onClick={() => alert("Items Purchased!!")}><Link to={"/"}><button>Purchase</button></Link></span></button>
                 </div>
             </div>
         </form>
