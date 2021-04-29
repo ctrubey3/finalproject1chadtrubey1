@@ -1,81 +1,94 @@
-import React from 'react';
-import fire from "../../Fire";
+import React, {useState} from 'react';
 import {Link} from "react-router-dom";
+import {data} from "../../data";
 
 function FirePage(){
-    const [products, setProducts]=React.useState([]);
-    const [submit]=React.useState(true);
-    const ObjectInfo =fire
-
-
-    const db = fire.firestore();
+    const elements =data
 
 
 
+    const defaultValues = {galaxy: 0, apple: 0, berry: 0, samsung: 0};
+    const [values, setValues] = useState(defaultValues);
+    const [stocks, setStocks] = useState(defaultValues);
+    const handleSubmit = e => {
+        e.preventDefault()
 
-    React.useEffect(()=>{
-        let newItems=[];
+    }
+    const total = () => {
+        return elements
+            .map(element => itemTotal(values[element.name], element.price))
+            .reduce((acc,v) => acc + v, 0)
+            .toFixed(2);
+    }
 
-        db.collection("products").get().then(function(snapshot){
-            snapshot.forEach(function(doc){
-                const obj = doc.data();
+    const itemTotal = (qty, price) => {
+        return (qty * price);
+    }
+    const handleOnChange = e => {
+        setValues({...values, [e.target.name]: e.target.value},
+            setStocks({...stocks, [e.target.name]: e.target.stock},
 
-                let item = {
-                    id: doc.id,
-                    img: obj.img,
-                    name:obj.name,
-                    stock:obj.stock,
-                    price:obj.price
-                };
+            ) );
+    }
 
-                console.log(obj);
-                newItems.push(item);
-            });
-
-            setProducts(newItems)
-        });
-        console.log()
-
-
-
-    },[db, submit]);
-
-
-
-
-
-
-
-    const styleLink ={
-        display:"block",
-        height:"300px",
+    const styleLink = {
+        display: "block",
+        height: "350px",
         width: "250px",
-        margin:"5px",
         backgroundColor: "darkblue",
         padding: "10px",
         border: "1px solid #ccc",
         boxshadow: "0 0 10px #ccc",
         position: "center",
+
+        marginLeft: "40%",
+
     }
 
 
+    let Links = elements.map((item) =>
+        <div>
+            <Link to={`/UserInfo/${item.id}`} style={styleLink} key={item.id}>
 
-    const ProductsEles = products.map((pro, idx)=>
-        <Link to={`/UserInfo/${pro.id}`} style={styleLink} key={idx} >
+                <img src={item.img} width="100" alt="item.img"/>
+                <h1>Name:{item.name}</h1>
+                <h3>IN STOCK:{(values[item.name ] - item.stock)}</h3>
+                <h3>Price:{item.price}</h3>
+            </Link>
+            <input
+                type="number"
+                id={item.id}
+                min="0"
+                value={values[item.name]}
+                name={item.name}
+                onChange={handleOnChange}
+                required
+            />
 
-            <img src={pro.img} width="100" alt="pro.img"/>
-            <h1>Name:{pro.name}</h1>
-            <h3>Stock:{pro.stock}</h3>
-            <h3>Price:{pro.price}</h3>
-        </Link>
+
+            <span className="value">
+                        ${(values[item.name] * item.price ).toFixed(2)}
+
+                    </span>
+        </div>
     );
 
-    return(
-        <div>
-            <h1>Store</h1>
-            {ProductsEles}
-        </div>
+    return (
+        <form onSubmit={handleSubmit}>
+
+
+
+
+
+                <div className="col-footer">
+                    {Links}
+                    <span className="total">$ {total()}</span>
+                    <button><span onClick={() => setValues(defaultValues)}>Clear</span></button>
+                </div>
+
+        </form>
     )
 }
 
-export default FirePage
+
+export default FirePage;
